@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Utility;
 
+use Image;
 use Illuminate\Support\Facades\File;
 
 class UtilitiesController extends Controller
@@ -28,8 +29,23 @@ class UtilitiesController extends Controller
 
         if(!empty($request->image)) {
             File::delete(public_path('images/'.$request->initialImage));
-            $newImageName = time(). '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $newImageName);    
+            
+            $image = $request->image;
+
+            if($image->getSize() > 500 * 1024) {
+                $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+                $newImageName = time().'.'. $image->getClientOriginalExtension();
+                $resizedImage->save(public_path('images/'. $newImageName));
+            }
+
+            else {
+                $newImageName = time(). '.' . $request->image->extension();
+                $request->image->move(public_path('images'), $newImageName);
+            }
         }
 
         else {

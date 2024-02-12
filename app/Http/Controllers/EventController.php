@@ -7,6 +7,7 @@ use App\Models\Events;
 use Carbon\Carbon;
 use App\Models\EventImage;
 
+use Image;
 use Illuminate\Support\Facades\File;
 
 class EventController extends Controller
@@ -35,9 +36,23 @@ class EventController extends Controller
         $newDate = $date->toFormattedDateString();
 
         // move image into Images folder in public directory
-        
-        $newImageName = time(). '.' . $request->image->extension();
-        $request->image->move(public_path('images'), $newImageName);
+    
+        $image = $request->image;
+
+        if($image->getSize() > 500 * 1024) {
+            $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $newImageName = time().'.'. $image->getClientOriginalExtension();
+            $resizedImage->save(public_path('images/'. $newImageName));
+        }
+
+        else {
+            $newImageName = time(). '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $newImageName);
+        }
 
         // move audio to audio folder in public directory
 
@@ -105,8 +120,25 @@ class EventController extends Controller
 
         else {
             File::delete(public_path('images/'.$request->initialImage));
-            $newImageName = time(). '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $newImageName);
+
+            $image = $request->image;
+
+            if($image->getSize() > 500 * 1024) {
+                $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+                $newImageName = time().'.'. $image->getClientOriginalExtension();
+                $resizedImage->save(public_path('images/'. $newImageName));
+            }
+
+            else {
+                $newImageName = time(). '.' . $request->image->extension();
+                $request->image->move(public_path('images'), $newImageName);
+            }
+
+            
         }
 
         if(empty($request->date)) {
@@ -147,8 +179,22 @@ class EventController extends Controller
 
         // move image into Images folder in public directory
 
-        $newImageName = time(). '.' . $request->image->extension();
-        $request->image->move(public_path('eventImages'), $newImageName);
+        $image = $request->image;
+
+        if($image->getSize() > 500 * 1024) {
+            $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $newImageName = time().'.'. $image->getClientOriginalExtension();
+            $resizedImage->save(public_path('eventImages/'. $newImageName));
+        }
+
+        else {
+            $newImageName = time(). '.' . $request->image->extension();
+            $request->image->move(public_path('eventImages'), $newImageName);
+        }
 
         EventImage::create([
             'image' => $newImageName,

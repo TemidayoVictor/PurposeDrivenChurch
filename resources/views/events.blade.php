@@ -34,7 +34,7 @@ Events & Latest News
             </div>
         @empty
             <div class="status-info">
-                <p>Stay tuned. Our Events will be available here.</p>
+                Stay tuned. Our Events will be available here.
             </div>    
         @endforelse
         <div class="page-links flex" style="margin-top: 30px">

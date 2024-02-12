@@ -10,7 +10,7 @@
     <link href="{{ asset ('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     @yield('lightGalleryCss')
     <link rel="stylesheet" href="{{ asset ('css/swiper-bundle.min.css') }}">
-    <link rel="stylesheet" href="{{ asset ('css/baseStyle7.css')}}">
+    <link rel="stylesheet" href="{{ asset ('css/baseStyle9.css')}}">
     <title>PDCI || @yield('title')</title>
     <style>
         

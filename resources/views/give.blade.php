@@ -35,10 +35,6 @@ Give Online
                     <h3>Bank</h3>
                     <p>Haggai Mortgage Bank Limited</p>
                 </div>
-                <div class="acct-details flex">
-                    <p class="info">If you give to this acount, please fill the "Giving Details" form below. We Celebrate You.</p>
-                    <button>Copy Account Number</button>
-                </div>
             </div>
 
         </div>
@@ -57,12 +53,20 @@ Give Online
                     <h3>Bank</h3>
                     <p>First Bank of Nigeria Plc</p>
                 </div>
-                <div class="acct-details flex">
-                    <p class="info">If you give to this acount, please fill the "Giving Details" form below. We Celebrate You.</p>
-                    <button class="inverse">Copy Account Number</button>
-                </div>
+                
             </div>
+        </div>
 
+        <h1>Partner With Us Today</h1>
+        <div class="account-container">
+            <div class="account-content">
+                <div class="acct-details flex">
+                    <h3>To partner with us, click the link below. We celebrate you ❤</h3>
+                </div>
+                <a href="https://bit.ly/PDCGLOBAL_PARTNERSHIP" class="msg-btn block mt-1">Partner With @unless ()
+                    
+                @endunless</a>
+            </div>
         </div>
         
         

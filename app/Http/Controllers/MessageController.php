@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Message;
 use Carbon\Carbon;
 
+use Image;
 use Illuminate\Support\Facades\File;
 
 class MessageController extends Controller
@@ -32,11 +33,24 @@ class MessageController extends Controller
 
         $date = new Carbon($request->date);
         $newDate = $date->toFormattedDateString();
+        $image = $request->image;
 
         // move image into Images folder in public directory
-        
-        $newImageName = time(). '.' . $request->image->extension();
-        $request->image->move(public_path('images'), $newImageName);
+
+        if($image->getSize() > 500 * 1024) {
+            $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $newImageName = time().'.'. $image->getClientOriginalExtension();
+            $resizedImage->save(public_path('images/'. $newImageName));
+        }
+
+        else {
+            $newImageName = time(). '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $newImageName);
+        }
 
         // move audio to audio folder in public directory
 
@@ -104,8 +118,24 @@ class MessageController extends Controller
 
         else {
             File::delete(public_path('images/'.$request->initialImage));
-            $newImageName = time(). '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $newImageName);
+            
+
+            $image = $request->image;
+
+            if($image->getSize() > 500 * 1024) {
+                $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+    
+                $newImageName = time().'.'. $image->getClientOriginalExtension();
+                $resizedImage->save(public_path('images/'. $newImageName));
+            }
+    
+            else {
+                $newImageName = time(). '.' . $request->image->extension();
+                $request->image->move(public_path('images'), $newImageName);
+            }
         }
 
         if(empty($request->date)) {

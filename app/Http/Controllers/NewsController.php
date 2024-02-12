@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\News;
+
+use Image;
 use Illuminate\Support\Facades\File;
 
 class NewsController extends Controller
@@ -27,8 +29,22 @@ class NewsController extends Controller
             'prompt',
         ]);
 
-        $newImageName = time(). '.' . $request->image->extension();
-        $request->image->move(public_path('images'), $newImageName);
+        $image = $request->image;
+
+        if($image->getSize() > 500 * 1024) {
+            $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $newImageName = time().'.'. $image->getClientOriginalExtension();
+            $resizedImage->save(public_path('images/'. $newImageName));
+        }
+
+        else {
+            $newImageName = time(). '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $newImageName);
+        }
 
         if(empty($request->web)) {
             $web = "Null";
@@ -89,8 +105,23 @@ class NewsController extends Controller
 
         else {
             File::delete(public_path('images/'.$request->initialImage));
-            $newImageName = time(). '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $newImageName);
+            
+            $image = $request->image;
+
+            if($image->getSize() > 500 * 1024) {
+                $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+
+                $newImageName = time().'.'. $image->getClientOriginalExtension();
+                $resizedImage->save(public_path('images/'. $newImageName));
+            }
+
+            else {
+                $newImageName = time(). '.' . $request->image->extension();
+                $request->image->move(public_path('images'), $newImageName);
+            }
         }
 
         if(($request->web != "Null") && ($request->prompt == "Null")) {

@@ -21,7 +21,7 @@ Messages of the House
                     <div class="mb-1">{!! (str_replace( '<p>&nbsp;</p>', '', $message->description)) !!}</div>
                     <div class="audio flex">
                         <audio controls> <source src="{{ asset('audio/'.$message->audio) }}"> </audio>
-                        <button>Download Message</button>
+                        {{-- <button>Download Message</button> --}}
                     </div>
                 </div>
             </div>

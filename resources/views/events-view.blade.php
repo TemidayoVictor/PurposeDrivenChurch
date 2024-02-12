@@ -27,7 +27,7 @@ Events & Latest News
             <h1 class="title-2 mb-1">Audio Message</h1>
             <div class="audio flex mb-1">
                 <audio controls> <source src="{{ asset('audio/'.$event->audio) }}"> </audio>
-                <button>Download Message</button>
+                {{-- <button>Download Message</button> --}}
             </div>
         </div>
         <div class="event-description pb-1">

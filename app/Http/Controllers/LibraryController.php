@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Library;
 
+use Image;
 use Illuminate\Support\Facades\File;
 
 class LibraryController extends Controller
@@ -27,8 +28,25 @@ class LibraryController extends Controller
             'image' => 'image|mimes:jpg,png,jpeg,webp|required',
         ]);
 
-        $newImageName = time(). '.' . $request->image->extension();
-        $request->image->move(public_path('libraryImages'), $newImageName);
+        // $newImageName = time(). '.' . $request->image->extension();
+        // $request->image->move(public_path('libraryImages'), $newImageName);
+
+        $image = $request->image;
+
+        if($image->getSize() > 500 * 1024) {
+            $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $newImageName = time().'.'. $image->getClientOriginalExtension();
+            $resizedImage->save(public_path('libraryImages/'. $newImageName));
+        }
+
+        else {
+            $newImageName = time(). '.' . $request->image->extension();
+            $request->image->move(public_path('libraryImages'), $newImageName);
+        }
 
         Library::create([
             'title' => $request->title,
@@ -74,8 +92,24 @@ class LibraryController extends Controller
 
         else {
             File::delete(public_path('libraryImages/'.$request->initialImage));
-            $newImageName = time(). '.' . $request->image->extension();
-            $request->image->move(public_path('libraryImages'), $newImageName);
+
+            $image = $request->image;
+
+            if($image->getSize() > 500 * 1024) {
+                $resizedImage = Image::make($image)->resize(500, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+    
+                $newImageName = time().'.'. $image->getClientOriginalExtension();
+                $resizedImage->save(public_path('libraryImages/'. $newImageName));
+            }
+    
+            else {
+                $newImageName = time(). '.' . $request->image->extension();
+                $request->image->move(public_path('libraryImages'), $newImageName);
+            }
+
         }
 
         Library::where('id', $id)->

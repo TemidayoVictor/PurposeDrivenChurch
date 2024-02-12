@@ -103,11 +103,11 @@
 @endsection
 
 @section('scriptJs')
-    <script>
+    {{-- <script>
         tinymce.init({
         selector: 'textarea',
         plugins: 'anchor autolink charmap codesample emoticons',
         toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
-    </script>
+    </script> --}}
 @endsection

@@ -84,7 +84,7 @@
                     </div>
                 </a>
 
-                <a href="../index.html" class="navbar-admin-link">
+                <a href="{{ route('home') }}" class="navbar-admin-link">
                     <div class="details par-flex">
                         <i class="fas fa-home"></i>
                         <p>Main Website</p>
